@@ -72,7 +72,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:ui-theme"))
-//    implementation(project(":feature:currency_converter"))
+    implementation(project(":feature:currency_converter"))
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

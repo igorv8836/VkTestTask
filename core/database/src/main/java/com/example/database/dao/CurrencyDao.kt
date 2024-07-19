@@ -27,7 +27,7 @@ interface CurrencyDao {
     suspend fun deleteAllCurrencies()
 
     @Query("SELECT * FROM currency WHERE charCode = :charCode")
-    fun getCurrency(charCode: String): Flow<CurrencyTable>
+    fun getCurrency(charCode: String): CurrencyTable
 
     @Query("SELECT * FROM currency")
     fun getAllCurrencies(): Flow<List<CurrencyTable>>

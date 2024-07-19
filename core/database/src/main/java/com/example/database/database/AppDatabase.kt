@@ -9,7 +9,8 @@ import com.example.database.entity.CurrencyTable
     version = 1,
     entities = [
         CurrencyTable::class
-    ]
+    ],
+    exportSchema = false
 )
 internal abstract class AppDatabase: RoomDatabase() {
     abstract fun getCurrencyDao(): CurrencyDao

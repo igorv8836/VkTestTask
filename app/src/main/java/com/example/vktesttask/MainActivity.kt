@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.database.dao.CurrencyDao
 import com.example.database.entity.CurrencyTable
 import com.example.network.api.CurrencyApiService
-import com.example.vktesttask.ui.theme.VkTestTaskTheme
+import com.example.ui_theme.app_theme.AppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            VkTestTaskTheme {
+            AppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -72,7 +72,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    VkTestTaskTheme {
+    AppTheme {
         Greeting("Android")
     }
 }

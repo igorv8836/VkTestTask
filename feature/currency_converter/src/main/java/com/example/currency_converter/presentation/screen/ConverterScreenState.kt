@@ -4,7 +4,7 @@ import com.example.currency_converter.domain.model.Currency
 
 internal sealed interface ConverterScreenState {
     data object Loading : ConverterScreenState
-    data class Content(val data: ConverterData) : ConverterScreenState
+    data class Content(val data: ConverterScreenData) : ConverterScreenState
     data class Error(val message: String) : ConverterScreenState
 }
 
@@ -13,7 +13,7 @@ internal sealed interface ConverterScreenEvent {
     data object RefreshCurrencies : ConverterScreenEvent
 }
 
-internal data class ConverterData(
+internal data class ConverterScreenData(
     val currencies: List<Currency>,
     val convertedValue: Double?
 )

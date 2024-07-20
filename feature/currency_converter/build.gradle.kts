@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ui_theme"
+    namespace = "com.example.currency_converter"
 
     compileSdk = 34
 
@@ -28,6 +28,10 @@ dependencies {
     implementation(libs.koin.android)
 
     implementation(libs.bundles.compose.libs)
+
+    debugImplementation(libs.junit)
+    debugImplementation(libs.androidx.junit)
+    debugImplementation(libs.androidx.espresso.core)
 
     implementation(project(":core:common"))
     implementation(project(":core:database"))

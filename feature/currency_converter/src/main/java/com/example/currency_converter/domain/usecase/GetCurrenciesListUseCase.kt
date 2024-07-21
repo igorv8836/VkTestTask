@@ -4,5 +4,5 @@ import com.example.currency_converter.domain.model.Currency
 import kotlinx.coroutines.flow.Flow
 
 interface GetCurrenciesListUseCase {
-    suspend fun getCurrencies(): Flow<List<Currency>>
+    fun getCurrencies(): Flow<List<Currency>>
 }

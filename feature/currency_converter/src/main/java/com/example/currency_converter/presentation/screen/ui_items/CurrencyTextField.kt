@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,6 +37,7 @@ internal fun CurrencyTextField(
     expanded: MutableState<Boolean>,
     suggestions: List<String>,
     getFilteredCurrencies: (String) -> Unit,
+    suggestionIsSelected: (String) -> Unit,
     trailingIconOnClick: () -> Unit
 ) {
     var textFieldSize by remember {
@@ -46,6 +48,7 @@ internal fun CurrencyTextField(
         value = text.value,
         onValueChange = {
             text.value = it
+            expanded.value = it.isNotEmpty()
             getFilteredCurrencies(it)
         },
         placeholder = {
@@ -91,8 +94,10 @@ internal fun CurrencyTextField(
                 LazyColumn(
                     modifier = Modifier.heightIn(max = 150.dp),
                 ) {
-                    items(suggestions.size) {
-
+                    items(suggestions) { it ->
+                        SuggestedItem(title = it) {
+                            suggestionIsSelected(it)
+                        }
                     }
                 }
 

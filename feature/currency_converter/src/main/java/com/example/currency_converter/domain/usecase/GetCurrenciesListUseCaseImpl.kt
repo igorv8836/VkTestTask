@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 internal class GetCurrenciesListUseCaseImpl(
     private val currencyRepository: CurrencyRepository
 ): GetCurrenciesListUseCase {
-    override suspend fun getCurrencies(): Flow<List<Currency>> {
+    override fun getCurrencies(): Flow<List<Currency>> {
         return currencyRepository.getCurrencies()
     }
 }

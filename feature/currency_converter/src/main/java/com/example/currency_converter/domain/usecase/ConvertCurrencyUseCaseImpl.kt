@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 internal class ConvertCurrencyUseCaseImpl(
     private val currencyRepository: CurrencyRepository
 ): ConvertCurrencyUseCase {
-    override suspend fun convertCurrency(fromCharCode: String, toCharCode: String, amount: Double): Flow<Double> {
+    override fun convertCurrency(fromCharCode: String, toCharCode: String, amount: String): Flow<Double> {
         return currencyRepository.convertCurrency(fromCharCode, toCharCode, amount)
     }
 

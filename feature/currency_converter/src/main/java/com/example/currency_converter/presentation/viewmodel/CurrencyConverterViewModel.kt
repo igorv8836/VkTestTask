@@ -10,12 +10,11 @@ import com.example.currency_converter.presentation.screen.ConverterScreenEvent
 import com.example.currency_converter.presentation.screen.ConverterScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 internal class CurrencyConverterViewModel(
@@ -27,22 +26,27 @@ internal class CurrencyConverterViewModel(
     private val suggestions = MutableStateFlow(emptyList<String>())
     private val currencies = getCurrenciesListUseCase.getCurrencies()
 
-    val uiState = combine(
-        currencies.map { it.map { it1 -> it1.name } },
-        convertedResult,
-        suggestions,
-        ConverterScreenState::Content
-    ).asResult().map { data ->
-        when (data) {
-            is Result.Loading -> ConverterScreenState.Loading
-            is Result.Error -> ConverterScreenState.Error(data.exception.message ?: "Error")
-            is Result.Success -> data.data
+    private val _uiState = MutableStateFlow<ConverterScreenState>(ConverterScreenState.Loading)
+    val uiState: StateFlow<ConverterScreenState> = _uiState
+
+    init {
+        viewModelScope.launch {
+            combine(
+                currencies.map { it.map { it1 -> it1.name } },
+                convertedResult,
+                suggestions,
+                ConverterScreenState::Content
+            ).asResult().map { data ->
+                when (data) {
+                    is Result.Loading -> ConverterScreenState.Loading
+                    is Result.Error -> ConverterScreenState.Error(data.exception.message ?: "Error")
+                    is Result.Success -> data.data
+                }
+            }.collect { state ->
+                _uiState.value = state
+            }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = ConverterScreenState.Loading
-    )
+    }
 
     fun invoke(event: ConverterScreenEvent) {
         viewModelScope.launch {
@@ -73,7 +77,8 @@ internal class CurrencyConverterViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val fromChar = currencies.firstOrNull()?.firstOrNull { it.name == fromName }?.charCode
             val toChar = currencies.firstOrNull()?.firstOrNull { it.name == toName }?.charCode
-            if (fromChar == null || toChar == null){
+            if (fromChar == null || toChar == null) {
+                _uiState.value = ConverterScreenState.Error("Введенная валюта не найдена")
                 return@launch
             }
             val result = convertCurrencyUseCase.convertCurrency(fromChar, toChar, amount)

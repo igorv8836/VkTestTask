@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,8 +44,8 @@ internal fun CurrencyConverterScreen(
 
     val state by viewModel.uiState.collectAsState()
 
-    val fromCurrencyText = remember { mutableStateOf("Доллар США") }
-    val toCurrencyText = remember { mutableStateOf("Российский рубль") }
+    val fromCurrencyText = remember { mutableStateOf("") }
+    val toCurrencyText = remember { mutableStateOf("") }
     val fromCurrencyTextRes = remember { mutableStateOf("") }
     val toCurrencyTextRes = remember { mutableStateOf("") }
     val fromCurrencyExpanded = remember { mutableStateOf(false) }
@@ -108,7 +112,6 @@ internal fun CurrencyConverterScreen(
                     suggestionIsSelected = {
                         fromCurrencyText.value = it
                         fromCurrencyExpanded.value = false
-                        getConvertedData()
                     },
                     getFilteredCurrencies = {
                         viewModel.invoke(ConverterScreenEvent.GetFilteredCurrencies(it))
@@ -117,8 +120,6 @@ internal fun CurrencyConverterScreen(
                     val temp = fromCurrencyText.value
                     fromCurrencyText.value = toCurrencyText.value
                     toCurrencyText.value = temp
-
-                    getConvertedData()
                 }
             },
             textField2 = {
@@ -131,7 +132,6 @@ internal fun CurrencyConverterScreen(
                     suggestionIsSelected = {
                         toCurrencyText.value = it
                         toCurrencyExpanded.value = false
-                        getConvertedData()
                     },
                     getFilteredCurrencies = {
                         viewModel.invoke(ConverterScreenEvent.GetFilteredCurrencies(it))
@@ -149,7 +149,6 @@ internal fun CurrencyConverterScreen(
                     hint = "Введите количество",
                     readOnly = false,
                 ) {
-                    getConvertedData()
                 }
             },
             textField2 = {
@@ -160,6 +159,22 @@ internal fun CurrencyConverterScreen(
                 ) {}
             }
         )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 16.dp)
+        ) {
+            Button(
+                onClick = { getConvertedData() },
+                shape = RoundedCornerShape(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            ) {
+                Text(text = "Конвертировать")
+            }
+        }
     }
 }
 

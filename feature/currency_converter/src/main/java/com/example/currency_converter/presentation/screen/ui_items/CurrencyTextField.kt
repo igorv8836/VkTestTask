@@ -22,6 +22,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -72,6 +74,10 @@ internal fun CurrencyTextField(
             .fillMaxWidth()
             .onGloballyPositioned { coordinates ->
                 textFieldSize = coordinates.size.toSize()
+            }
+            .onFocusChanged { focusState: FocusState ->
+                expanded.value = focusState.isFocused
+                getFilteredCurrencies(text.value)
             },
         colors = TextFieldDefaults.colors()
             .copy(
